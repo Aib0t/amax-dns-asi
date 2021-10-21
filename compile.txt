@@ -1,0 +1,7 @@
+Example:
+Windows10: x86 Native Tools Command Prompt for VS 2019
+%comspec% /k "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars32.bat"
+Can be found from the Start Menu
+
+Compile: (Generates .asi plugin)
+cl /D_USRDLL /D_WINDLL source/dllmain.c /link /DLL /OUT:amax-redirect.asi
