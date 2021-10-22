@@ -2,7 +2,7 @@ name: Amax DNS ASI build
 
 on:
   push:
-    branches: [ main, git-actions, dev ]
+    branches: [ main, dev ]
 
   workflow_dispatch:
 
@@ -37,7 +37,7 @@ jobs:
           retention-days: 1
           
       - name: Uploading a release
-        if: github.event.pull_request.base.ref == 'main'
+        if: contains(github.ref, "main")
         uses: "marvinpinto/action-automatic-releases@latest"      
         with:
           repo_token: "${{ secrets.RELEASE_TOKEN }}"
