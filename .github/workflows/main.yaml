@@ -1,0 +1,48 @@
+name: Amax DNS ASI build
+
+on:
+  push:
+    branches: [ main, git-actions, dev ]
+
+  workflow_dispatch:
+
+env:
+  TEMP: temp
+
+defaults:
+  run:
+    shell: cmd
+
+jobs:
+  build:
+    name: Amax DNS ASI build
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setting up MSVC
+      - uses: ilammy/msvc-dev-cmd@v1
+      
+      - name: Build something requiring CL.EXE
+        run: |
+           cl /D_USRDLL /D_WINDLL source/dllmain.c /link /DLL /OUT:amax-redirect.asi
+             
+      - name: Storing artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: amax-redirect.asi
+          path: amax-redirect.asi
+          retention-days: 1
+          
+      - name: uploading a release
+        if: github.ref == 'refs/heads/develop'
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.RELEASE_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Testing build"
+          files: |
+            amax-redirect.asi
