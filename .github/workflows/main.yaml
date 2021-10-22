@@ -6,12 +6,9 @@ on:
 
   workflow_dispatch:
 
-env:
-  TEMP: temp
-
 defaults:
   run:
-    shell: cmd
+    shell: pwsh
 
 jobs:
   build:
@@ -23,12 +20,15 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setting up MSVC
-      - uses: ilammy/msvc-dev-cmd@v1
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x86
       
-      - name: Build something requiring CL.EXE
+      - name: Build ASI plugin
         run: |
-           cl /D_USRDLL /D_WINDLL source/dllmain.c /link /DLL /OUT:amax-redirect.asi
-             
+           cl /D_USRDLL /D_WINDLL source/dllmain.cpp /link /DLL /OUT:amax-redirect.asi
+      
+      #Temp fix, since upload is broken
       - name: Storing artifact
         uses: actions/upload-artifact@v2
         with:
@@ -36,9 +36,9 @@ jobs:
           path: amax-redirect.asi
           retention-days: 1
           
-      - name: uploading a release
-        if: github.ref == 'refs/heads/develop'
-        uses: "marvinpinto/action-automatic-releases@latest"
+      - name: Uploading a release
+        if: github.event.pull_request.base.ref == 'main'
+        uses: "marvinpinto/action-automatic-releases@latest"      
         with:
           repo_token: "${{ secrets.RELEASE_TOKEN }}"
           automatic_release_tag: "latest"
