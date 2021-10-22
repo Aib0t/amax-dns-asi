@@ -37,7 +37,7 @@ jobs:
           retention-days: 1
           
       - name: Uploading a release
-        if: contains(github.ref, "main")
+        if: github.ref == 'refs/heads/main'
         uses: "marvinpinto/action-automatic-releases@latest"      
         with:
           repo_token: "${{ secrets.RELEASE_TOKEN }}"
