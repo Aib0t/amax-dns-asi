@@ -4,4 +4,5 @@ Windows10: x86 Native Tools Command Prompt for VS 2019
 Can be found from the Start Menu
 
 Compile: (Generates .asi plugin)
-cl /D_USRDLL /D_WINDLL source/dllmain.c /link /DLL /OUT:amax-redirect.asi
+cl /D_USRDLL /D_WINDLL /EHcs source/dllmain.cpp /link /DLL /OUT:amax-redirect.asi
+
